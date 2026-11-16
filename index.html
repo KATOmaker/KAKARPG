@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#120d1c">
+  <title>Ascensão das Bruxas — Mesa Virtual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div id="lobby" class="screen lobby">
+    <div class="lobby-card">
+      <div class="brand-mark">✦</div>
+      <h1>Ascensão das Bruxas</h1>
+      <p class="subtitle">Mesa virtual para mestres e jogadores — mapa, fichas, dados, iniciativa e névoa de guerra.</p>
+
+      <div class="field">
+        <label for="playerName">Seu nome</label>
+        <input id="playerName" type="text" autocomplete="name" placeholder="Ex.: Kayky, Miriam, Mestre">
+      </div>
+      <div class="field">
+        <label for="roomCode">Código da sala</label>
+        <input id="roomCode" type="text" maxlength="10" autocapitalize="characters" placeholder="Ex.: BRUXA">
+        <small>Todos usam o mesmo código para entrar na mesma mesa.</small>
+      </div>
+
+      <div class="actions stack">
+        <button id="btnHost" class="btn primary">Entrar como Mestre</button>
+        <button id="btnJoin" class="btn">Entrar como Jogador</button>
+        <button id="btnSolo" class="btn ghost">Mesa local (teste offline)</button>
+      </div>
+      <p id="lobbyMsg" class="hint" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div id="app" class="screen app hidden" aria-hidden="true">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="sigil">✦</div>
+        <div>
+          <div id="roomTitle" class="room-title">Mesa</div>
+          <div id="roomMeta" class="room-meta">—</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="connBadge" class="badge">offline</span>
+        <button id="btnLeave" class="btn small ghost">Sair</button>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Navegação">
+      <button class="tab active" data-view="view-table" role="tab" aria-selected="true">Mesa</button>
+      <button class="tab" data-view="view-characters" role="tab">Personagens</button>
+      <button class="tab gm-only" data-view="view-gm" role="tab">Mestre</button>
+    </nav>
+
+    <main class="main">
+      <!-- MESA -->
+      <section id="view-table" class="view active" role="tabpanel">
+        <div class="layout-table">
+          <div class="board-panel">
+            <div class="board-toolbar">
+              <div class="toolbar-group">
+                <button id="btnFit" class="btn small">Ajustar</button>
+                <label class="toggle"><input type="checkbox" id="toggleGrid" checked> Grade</label>
+              </div>
+              <div class="toolbar-group gm-only">
+                <label class="toggle"><input type="checkbox" id="fogPaint"> Pintar névoa</label>
+                <select id="fogMode" class="select small" title="Modo da névoa">
+                  <option value="hide">Esconder</option>
+                  <option value="reveal">Revelar</option>
+                </select>
+              </div>
+            </div>
+            <div id="boardWrap" class="board-wrap">
+              <div id="board" class="board">
+                <div id="mapLayer" class="layer map-layer"></div>
+                <canvas id="gridCanvas" class="layer grid-layer"></canvas>
+                <div id="tokenLayer" class="layer token-layer"></div>
+                <canvas id="fogCanvas" class="layer fog-layer"></canvas>
+                <div id="diceStage" class="dice-stage" aria-live="polite"></div>
+              </div>
+            </div>
+            <p class="hint board-hint gm-only">Mestre: arraste tokens, use “Pintar névoa” para esconder/revelar áreas. Clique em um token para editar.</p>
+            <p class="hint board-hint player-only">Arraste seu token pelo mapa. A névoa esconde o que o mestre ainda não revelou.</p>
+          </div>
+
+          <aside class="side-panel">
+            <div class="card">
+              <div class="card-head"><h2>Dados</h2><span class="muted">role no centro da mesa</span></div>
+              <div class="dice-bar">
+                <button class="die-btn" data-die="2">d2</button>
+                <button class="die-btn" data-die="4">d4</button>
+                <button class="die-btn" data-die="6">d6</button>
+                <button class="die-btn" data-die="8">d8</button>
+                <button class="die-btn" data-die="10">d10</button>
+                <button class="die-btn" data-die="12">d12</button>
+                <button class="die-btn" data-die="20">d20</button>
+                <button class="die-btn" data-die="100">d100</button>
+              </div>
+              <div class="dice-mod">
+                <label>Modificador <input id="diceMod" type="number" value="0"></label>
+                <label>Qtd <input id="diceQty" type="number" value="1" min="1" max="10"></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h2>Iniciativa</h2>
+                <div class="row gm-only">
+                  <button id="btnRollInit" class="btn small primary">Rolar auto</button>
+                  <button id="btnNextTurn" class="btn small">Próximo</button>
+                  <button id="btnClearInit" class="btn small ghost">Limpar</button>
+                </div>
+              </div>
+              <ol id="initList" class="init-list"></ol>
+              <p id="initEmpty" class="hint">Sem iniciativa ativa. O mestre pode rolar automaticamente.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h2>Registro</h2><button id="btnClearLog" class="btn small ghost">Limpar</button></div>
+              <ul id="logList" class="log-list"></ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- PERSONAGENS -->
+      <section id="view-characters" class="view" role="tabpanel" hidden>
+        <div class="view-header">
+          <h2>Personagens & Fichas</h2>
+          <div class="row">
+            <button id="btnNewChar" class="btn primary">+ Novo personagem</button>
+            <button id="btnImportGrimoire" class="btn">Importar grimoire</button>
+            <input id="grimoireFile" type="file" accept=".json" hidden>
+          </div>
+        </div>
+        <div class="char-layout">
+          <aside class="card char-list-card">
+            <div class="card-head"><h3>Lista</h3></div>
+            <ul id="charList" class="char-list"></ul>
+          </aside>
+          <div class="card char-sheet-card">
+            <form id="charForm" class="char-form" autocomplete="off">
+              <div class="sheet-empty" id="sheetEmpty">Selecione ou crie um personagem para editar a ficha.</div>
+              <div id="sheetBody" class="sheet-body hidden">
+                <div class="sheet-top">
+                  <div class="portrait-block">
+                    <div id="charPortrait" class="portrait">Sem imagem</div>
+                    <button type="button" id="btnCharImage" class="btn small">Imagem</button>
+                  </div>
+                  <div class="sheet-fields">
+                    <div class="grid2">
+                      <label>Nome <input name="name" required></label>
+                      <label>Classe / Arquétipo <input name="clazz"></label>
+                      <label>Raça / Origem <input name="race"></label>
+                      <label>Elemento <input name="element"></label>
+                      <label>Nível <input name="level" type="number" min="0" value="1"></label>
+                      <label>Dono (jogador) <input name="owner" placeholder="nome do jogador"></label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="stats-row">
+                  <label class="stat-box hp"><span>Vida</span><div class="pair"><input name="hp" type="number" min="0" value="10"><b>/</b><input name="hpMax" type="number" min="1" value="10"></div></label>
+                  <label class="stat-box mp"><span>Mana</span><div class="pair"><input name="mp" type="number" min="0" value="10"><b>/</b><input name="mpMax" type="number" min="0" value="10"></div></label>
+                  <label class="stat-box"><span>Sanidade</span><div class="pair"><input name="san" type="number" min="0" value="10"><b>/</b><input name="sanMax" type="number" min="1" value="10"></div></label>
+                  <label class="stat-box"><span>Defesa</span><input name="def" type="number" value="0"></label>
+                </div>
+
+                <h3>Atributos</h3>
+                <div id="attrGrid" class="attr-grid"></div>
+
+                <div class="grid2">
+                  <div>
+                    <h3>Inventário</h3>
+                    <textarea name="inventory" rows="6" placeholder="Itens, equipamentos, ouro..."></textarea>
+                  </div>
+                  <div>
+                    <h3>Poderes & Habilidades</h3>
+                    <textarea name="powers" rows="6" placeholder="Habilidades, magias, técnicas..."></textarea>
+                  </div>
+                </div>
+                <label>Anotações <textarea name="notes" rows="4" placeholder="História, objetivos, condições..."></textarea></label>
+
+                <div class="sheet-actions">
+                  <button type="submit" class="btn primary">Salvar ficha</button>
+                  <button type="button" id="btnCharToToken" class="btn">Criar token no mapa</button>
+                  <button type="button" id="btnDeleteChar" class="btn danger ghost">Excluir</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- MESTRE -->
+      <section id="view-gm" class="view" role="tabpanel" hidden>
+        <div class="view-header">
+          <h2>Painel do Mestre</h2>
+          <p class="hint">Controle o mapa, névoa, tokens, inimigos e NPCs.</p>
+        </div>
+        <div class="gm-grid">
+          <div class="card">
+            <div class="card-head"><h3>Mapa</h3></div>
+            <div class="stack">
+              <button id="btnMapUpload" class="btn">Enviar imagem do mapa</button>
+              <button id="btnMapClear" class="btn ghost">Remover mapa</button>
+              <label>Largura do grid (colunas) <input id="gridCols" type="number" min="5" max="60" value="24"></label>
+              <label>Altura do grid (linhas) <input id="gridRows" type="number" min="5" max="60" value="16"></label>
+              <button id="btnApplyGrid" class="btn small">Aplicar grid</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Névoa de guerra</h3></div>
+            <div class="stack">
+              <p class="hint">Ative “Pintar névoa” na barra da mesa e arraste sobre o mapa. Modo esconder/revelar define o pincel.</p>
+              <button id="btnFogCover" class="btn">Cobrir tudo</button>
+              <button id="btnFogReveal" class="btn">Revelar tudo</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Tokens & Criaturas</h3></div>
+            <div class="stack">
+              <div class="row wrap">
+                <button id="btnAddEnemy" class="btn">+ Inimigo</button>
+                <button id="btnAddNpc" class="btn">+ NPC</button>
+                <button id="btnAddPlayers" class="btn">Tokens dos jogadores</button>
+              </div>
+              <ul id="tokenList" class="token-admin-list"></ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Biblioteca (Grimoire)</h3></div>
+            <p class="hint">NPCs importados do arquivo grimoire podem ser colocados no mapa.</p>
+            <ul id="libraryList" class="token-admin-list"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL TOKEN -->
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h3 id="modalTitle">Editar token</h3>
+        <button class="btn small ghost" data-close="1">Fechar</button>
+      </div>
+      <form id="tokenForm" class="modal-body"></form>
+    </div>
+  </div>
+
+  <input id="imagePicker" type="file" accept="image/*" hidden>
+</body>
+</html>

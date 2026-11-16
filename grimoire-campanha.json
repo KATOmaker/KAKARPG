@@ -1,0 +1,106 @@
+{
+ "campanha": "A Ascensão das Bruxas",
+ "fonte": "https://www.ttrpg.bot/campaigns/fc0cd54f-699e-4899-afa3-22f0c286bff3",
+ "npcs": [
+  {
+   "n": "Edda, a Ferreira",
+   "hp": 60,
+   "nota": "Ferreira da forja inovadora; bêbada, tem desvantagem nos ataques."
+  },
+  {
+   "n": "Gregor, o Taverneiro",
+   "hp": 20,
+   "nota": "Taverneiro de Mecos; marido da Lara."
+  },
+  {
+   "n": "Lara, a Bruxa",
+   "hp": 150,
+   "nota": "Selada. 120 de mana. Cajado d8, Lâminas do frio confin, Mazio, Eletrificação polimórfica."
+  },
+  {
+   "n": "Gigante de Pedra",
+   "hp": 100,
+   "nota": "60 de mana. Espada gigante d12, Super rajada mágica d20."
+  },
+  {
+   "n": "A Guardiã da cidade",
+   "hp": null,
+   "nota": "Boss do Arco 3; núcleo carmesim no peito. Vida não definida no roteiro."
+  },
+  {
+   "n": "A Guardiã de Northwood",
+   "hp": null,
+   "nota": "A “rainha” de Northwood."
+  },
+  {
+   "n": "A Maid",
+   "hp": null,
+   "nota": "Garota loira da Biblioteca."
+  },
+  {
+   "n": "Aisha",
+   "hp": null,
+   "nota": "Criança. Não sexualizar."
+  },
+  {
+   "n": "Charles, o Mago Supremo",
+   "hp": null,
+   "nota": "Perfil em branco no roteiro."
+  },
+  {
+   "n": "Dona Zélia",
+   "hp": null,
+   "nota": "Vítima de ataque; missão da Resistência."
+  },
+  {
+   "n": "Fanta",
+   "hp": null,
+   "nota": "Fantasminha bebê, pet do Arrop."
+  },
+  {
+   "n": "Henri",
+   "hp": null,
+   "nota": "Homem alto de cabelos vermelhos e armadura prateada."
+  },
+  {
+   "n": "Josh Watter (Dr. Água)",
+   "hp": null,
+   "nota": "Responsável pelos dossiês da Resistência."
+  },
+  {
+   "n": "Leon",
+   "hp": null,
+   "nota": "Umbrion da Resistência."
+  },
+  {
+   "n": "Lian",
+   "hp": null,
+   "nota": "Criança curiosa de Mecos."
+  },
+  {
+   "n": "Nilda",
+   "hp": null,
+   "nota": "Feiticeira misteriosa."
+  },
+  {
+   "n": "O Mordomo (Grupo B)",
+   "hp": null,
+   "nota": "Guia a carroça do Grupo B."
+  },
+  {
+   "n": "Rudeus",
+   "hp": null,
+   "nota": "Senhor religioso e manipulador."
+  },
+  {
+   "n": "Seu Zé",
+   "hp": null,
+   "nota": "Dono da loja de armas deslocadas no tempo."
+  },
+  {
+   "n": "Turris",
+   "hp": null,
+   "nota": "Cientista louco da torre."
+  }
+ ]
+}
