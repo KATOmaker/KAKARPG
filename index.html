@@ -3,50 +3,267 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1a0b10">
-  <title>KAKA RPG — Ascensão das Bruxas</title>
+  <meta name="theme-color" content="#160a0e">
+  <meta name="description" content="KAKA RPG — mesa virtual de RPG de mesa com mapas, névoa de guerra, fichas vivas, dados e multiplayer em tempo real.">
+  <title>KAKA RPG — Sua mesa, sua história</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div id="lobby" class="screen lobby">
-    <div class="lobby-card glass">
-      <div class="brand-mark">✦</div>
-      <h1>Ascensão das Bruxas</h1>
-      <p class="subtitle">Mesa virtual — mestre cadastra e vincula personagens, jogadores controlam e rolam dados.</p>
-      <div class="field">
-        <label for="playerName">Seu nick (aparece nos dados)</label>
-        <input id="playerName" type="text" autocomplete="name" placeholder="Ex.: Kayky, Miriam">
+
+  <!-- ============ LANDING PAGE ============ -->
+  <div id="landing" class="screen landing">
+    <div class="landing-glow g1" aria-hidden="true"></div>
+    <div class="landing-glow g2" aria-hidden="true"></div>
+    <div class="landing-grain" aria-hidden="true"></div>
+
+    <header class="site-nav glass">
+      <a class="brand" href="#top" aria-label="KAKA RPG — início">
+        <span class="brand-sigil">✦</span>
+        <span class="brand-name">KAKA <b>RPG</b></span>
+      </a>
+      <nav class="site-links" aria-label="Navegação">
+        <a href="#recursos">Recursos</a>
+        <a href="#como">Como funciona</a>
+        <a href="#mesa">A mesa</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="btn small ghost" data-goto-lobby>Entrar</button>
+        <button type="button" class="btn small primary" data-goto-lobby>Criar sala</button>
       </div>
-      <div class="field">
-        <label for="roomCode">Código da sala</label>
-        <input id="roomCode" type="text" maxlength="10" autocapitalize="characters" placeholder="Ex.: BRUXA">
-      </div>
-      <div class="actions stack">
-        <button id="btnHost" class="btn primary">Entrar como Mestre</button>
-        <button id="btnJoin" class="btn">Entrar como Jogador</button>
-        <button id="btnSolo" class="btn ghost">Mesa local (teste)</button>
-      </div>
-      <p id="lobbyMsg" class="hint" aria-live="polite"></p>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow"><i></i> Mesa virtual · multiplayer em tempo real</span>
+          <h1>Cada sessão merece uma mesa à altura da <em>história</em>.</h1>
+          <p class="hero-lead">Mapas, névoa de guerra, fichas vivas e dados que todo mundo vê. O KAKA RPG reúne mestre e jogadores em uma mesa rápida, bonita e pronta para a próxima cena.</p>
+          <div class="hero-actions">
+            <button type="button" class="btn primary big" data-goto-lobby>Abrir minha mesa</button>
+            <a class="btn ghost big" href="#recursos">Ver recursos</a>
+          </div>
+          <ul class="hero-points">
+            <li><span>✓</span> Sem instalação</li>
+            <li><span>✓</span> Mapas ilimitados</li>
+            <li><span>✓</span> Funciona no celular</li>
+          </ul>
+        </div>
+
+        <div class="hero-art reveal">
+          <div class="mockup glass">
+            <div class="mockup-bar">
+              <span class="mockup-dots"><i></i><i></i><i></i></span>
+              <span class="mockup-title">Sala BRUXA · Cripta de Ébano</span>
+              <span class="mockup-live">ao vivo</span>
+            </div>
+            <div class="mockup-board">
+              <div class="mockup-map"></div>
+              <div class="mockup-grid"></div>
+              <div class="mockup-fog"></div>
+              <div class="mock-token tok-a"><span>K</span><i style="width:72%"></i></div>
+              <div class="mock-token tok-b"><span>M</span><i style="width:45%"></i></div>
+              <div class="mock-token tok-c"><span>☠</span><i style="width:88%"></i></div>
+              <div class="mock-die">20<small>d20</small></div>
+              <div class="mock-who">Kayky</div>
+            </div>
+            <div class="mockup-foot">
+              <div class="mock-dice"><b>d4</b><b>d6</b><b>d8</b><b>d10</b><b>d12</b><b class="on">d20</b></div>
+              <span class="mock-hint">Névoa pintada à mão</span>
+            </div>
+          </div>
+          <div class="art-note note-a"><b>4</b> poderes para magos</div>
+          <div class="art-note note-b">Falha crítica global</div>
+        </div>
+      </section>
+
+      <section class="trust-strip" aria-label="Destaques">
+        <span>Feito para mestres exigentes</span>
+        <div class="trust-items">
+          <b>Mapas &amp; ambientes</b><i></i><b>Névoa livre</b><i></i><b>Fichas completas</b><i></i><b>Dados identificados</b><i></i><b>Modo Jogar / Editor</b>
+        </div>
+      </section>
+      <section id="recursos" class="section features">
+        <div class="section-head reveal">
+          <span class="eyebrow"><i></i> Recursos</span>
+          <h2>Tudo o que a mesa precisa, sem abrir dez abas.</h2>
+          <p>Uma mesa só, com o essencial bem resolvido — do primeiro mapa ao último dado da sessão.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card reveal">
+            <span class="feature-icon">◈</span>
+            <h3>Mapas &amp; ambientes</h3>
+            <p>Cadastre quantos cenários quiser e troque de ambiente em um clique, sem perder tokens nem névoa.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-icon">◐</span>
+            <h3>Névoa de guerra livre</h3>
+            <p>Pinte com o pincel onde quiser. Esconda corredores, revele salas e guarde o mistério para o momento certo.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-icon">✦</span>
+            <h3>Fichas completas</h3>
+            <p>Status, atributos, inventário e poderes. O mestre define os limites; o jogador cuida dos valores atuais.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-icon">⚄</span>
+            <h3>Dados com nome</h3>
+            <p>Cada rolagem mostra quem rolou e qual personagem está em jogo. Atributos entram na conta automaticamente.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-icon">◭</span>
+            <h3>Modo Jogar / Editor</h3>
+            <p>No modo Jogar o mestre narra e move o mundo. No Editor, ajusta cada detalhe da mesa com liberdade total.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-icon">⚔</span>
+            <h3>Falha crítica de verdade</h3>
+            <p>Um 1 natural toma a tela de todos com “FALHA CRÍTICA” — independente de qualquer bônus. O momento é inesquecível.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="como" class="section steps">
+        <div class="section-head reveal">
+          <span class="eyebrow"><i></i> Como funciona</span>
+          <h2>Da ideia à mesa em três passos.</h2>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card reveal">
+            <span class="step-num">01</span>
+            <h3>Abra a sala</h3>
+            <p>Entre como mestre, escolha um código e a campanha fica salva no seu navegador, pronta para continuar.</p>
+          </article>
+          <article class="step-card reveal">
+            <span class="step-num">02</span>
+            <h3>Chame os jogadores</h3>
+            <p>Compartilhe o código. Cada pessoa entra com o próprio nick e assume os personagens que você vincular.</p>
+          </article>
+          <article class="step-card reveal">
+            <span class="step-num">03</span>
+            <h3>Conte a história</h3>
+            <p>Troque de mapa, pinte a névoa, role os dados e conduza o combate. A mesa sincroniza tudo em tempo real.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="mesa" class="section showcase">
+        <div class="showcase-copy reveal">
+          <span class="eyebrow"><i></i> A mesa</span>
+          <h2>Uma tela cheia de história — e nenhuma distração.</h2>
+          <p>O mapa ocupa quase toda a tela. Fichas, painel do mestre e edição abrem em janelas sobrepostas, então ninguém perde a cena nem o grid.</p>
+          <ul class="check-list">
+            <li><span>✓</span> Mapa centralizado e amplo, pensado para projetor e celular</li>
+            <li><span>✓</span> Tokens com retrato inteiro, vida e nome visíveis</li>
+            <li><span>✓</span> Iniciativa, registro de rolagens e troca de ambiente</li>
+            <li><span>✓</span> Salvo localmente e sincronizado com os jogadores</li>
+          </ul>
+          <button type="button" class="btn primary" data-goto-lobby>Começar agora</button>
+        </div>
+        <div class="showcase-art reveal">
+          <div class="mini-panel glass">
+            <div class="mini-head">
+              <span>Iniciativa</span>
+              <span class="mini-badge">Rodada 3</span>
+            </div>
+            <ol class="mini-init">
+              <li class="on"><b>1</b> Kayky <span>21</span></li>
+              <li><b>2</b> Miriam <span>18</span></li>
+              <li><b>3</b> Cultista <span>14</span></li>
+              <li><b>4</b> Inimigo <span>9</span></li>
+            </ol>
+            <div class="mini-sheet">
+              <div class="mini-portrait">K</div>
+              <div>
+                <strong>Kayky, o Errante</strong>
+                <span>Mago · Nv 5 · Mago de Sangue</span>
+                <div class="mini-bars"><i style="width:78%"></i><i style="width:52%"></i><i style="width:91%"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band reveal">
+        <div>
+          <span class="eyebrow"><i></i> Pronto para a próxima cena?</span>
+          <h2>A mesa está posta.</h2>
+          <p>Crie a sala, chame a mesa e deixe a história acontecer.</p>
+        </div>
+        <button type="button" class="btn primary big" data-goto-lobby>Entrar na mesa</button>
+      </section>
+
+      <footer class="site-footer">
+        <div class="brand">
+          <span class="brand-sigil">✦</span>
+          <span class="brand-name">KAKA <b>RPG</b></span>
+        </div>
+        <p>Mesa virtual independente para campanhas de RPG de mesa. Feita para durar a campanha inteira.</p>
+        <span class="footer-note">Ascensão das Bruxas · v4</span>
+      </footer>
+    </main>
+  </div>
+  <!-- ============ LOBBY ============ -->
+  <div id="lobby" class="screen lobby hidden">
+    <div class="lobby-shell">
+      <aside class="lobby-intro">
+        <button type="button" class="link-back" data-goto-landing>← Voltar ao site</button>
+        <div class="brand-mark">✦</div>
+        <h1>Entre na mesa</h1>
+        <p class="subtitle">O mestre cadastra e vincula personagens. Os jogadores entram com o nick combinado e assumem o controle.</p>
+        <ul class="lobby-list">
+          <li><b>Mestre</b><span>Cria a sala, define mapas, fichas e limites.</span></li>
+          <li><b>Jogador</b><span>Entra com o nick exato que o mestre vinculou.</span></li>
+          <li><b>Todos</b><span>Rolam dados, acompanham a mesa e veem a falha crítica.</span></li>
+        </ul>
+        <div class="lobby-tip"><b>Dica</b> Use o mesmo código de sala para reencontrar a campanha depois.</div>
+      </aside>
+
+      <section class="lobby-card glass">
+        <h2>Acessar campanha</h2>
+        <div class="field">
+          <label for="playerName">Seu nick (aparece nos dados)</label>
+          <input id="playerName" type="text" autocomplete="name" maxlength="24" placeholder="Ex.: Kayky, Miriam">
+        </div>
+        <div class="field">
+          <label for="roomCode">Código da sala</label>
+          <input id="roomCode" type="text" maxlength="10" autocapitalize="characters" placeholder="Ex.: BRUXA">
+        </div>
+        <div class="actions stack">
+          <button id="btnHost" class="btn primary">Entrar como Mestre</button>
+          <button id="btnJoin" class="btn">Entrar como Jogador</button>
+          <button id="btnSolo" class="btn ghost">Mesa local (teste)</button>
+        </div>
+        <p id="lobbyMsg" class="hint" aria-live="polite"></p>
+        <p class="hint tiny">A sala fica salva neste navegador. Para jogar com outras pessoas, use a versão publicada em HTTPS.</p>
+      </section>
     </div>
   </div>
 
+  <!-- ============ MESA ============ -->
   <div id="app" class="screen app hidden" aria-hidden="true">
     <header class="topbar glass">
       <div class="topbar-left">
         <div class="sigil">✦</div>
-        <div>
+        <div class="room-id">
           <div id="roomTitle" class="room-title">Mesa</div>
           <div id="roomMeta" class="room-meta">—</div>
         </div>
+        <span id="modeBadge" class="badge mode-badge gm-only">Modo Editor</span>
       </div>
       <div class="topbar-right">
-        <button id="btnOpenChars" class="btn small">Personagens</button>
-        <button id="btnOpenGm" class="btn small gm-only">Painel do Mestre</button>
+        <div id="modeSwitch" class="segmented gm-only" role="group" aria-label="Modo da mesa">
+          <button type="button" data-mode="play">Jogar</button>
+          <button type="button" data-mode="edit" class="active">Editor</button>
+        </div>
+        <select id="mapSelect" class="select small map-select gm-only" title="Ambiente ativo" aria-label="Ambiente ativo"></select>
+        <button id="btnTogglePanel" class="btn small" title="Mostrar/ocultar painel">Painel</button>
+        <button id="btnOpenChars" class="btn small">Fichas</button>
+        <button id="btnOpenGm" class="btn small gm-only edit-only">Mestre</button>
         <span id="connBadge" class="badge">offline</span>
         <button id="btnLeave" class="btn small ghost">Sair</button>
       </div>
@@ -55,20 +272,6 @@
     <main class="main main-table">
       <div class="layout-table">
         <div class="board-panel">
-          <div class="board-toolbar glass-soft">
-            <div class="toolbar-group">
-              <button id="btnFit" class="btn small">Centralizar</button>
-              <label class="toggle"><input type="checkbox" id="toggleGrid" checked> Grade</label>
-            </div>
-            <div class="toolbar-group gm-only">
-              <label class="toggle"><input type="checkbox" id="fogPaint"> Pintar névoa livre</label>
-              <select id="fogMode" class="select small">
-                <option value="hide">Esconder</option>
-                <option value="reveal">Revelar</option>
-              </select>
-              <label class="toggle">Pincel <input id="fogSize" type="range" min="10" max="120" value="40"></label>
-            </div>
-          </div>
           <div class="board-center">
             <div id="boardWrap" class="board-wrap glass">
               <div id="board" class="board">
@@ -79,14 +282,43 @@
                 <div id="diceStage" class="dice-stage" aria-live="polite"></div>
               </div>
             </div>
+
+            <div class="board-toolbar glass-soft">
+              <div class="toolbar-group">
+                <button id="btnFit" class="btn small">Centralizar</button>
+                <label class="toggle"><input type="checkbox" id="toggleGrid" checked> Grade</label>
+              </div>
+              <div class="toolbar-group gm-only edit-only">
+                <label class="toggle"><input type="checkbox" id="fogPaint"> Névoa</label>
+                <select id="fogMode" class="select small" aria-label="Modo da névoa">
+                  <option value="hide">Esconder</option>
+                  <option value="reveal">Revelar</option>
+                </select>
+                <label class="toggle brush">Pincel <input id="fogSize" type="range" min="10" max="120" value="40"></label>
+              </div>
+            </div>
+
+            <div class="dice-dock glass" aria-label="Dados rápidos">
+              <span id="dockWho" class="dock-who">Rolar como você</span>
+              <div class="dock-dice">
+                <button class="die-chip" data-die="4">d4</button>
+                <button class="die-chip" data-die="6">d6</button>
+                <button class="die-chip" data-die="8">d8</button>
+                <button class="die-chip" data-die="10">d10</button>
+                <button class="die-chip" data-die="12">d12</button>
+                <button class="die-chip accent" data-die="20">d20</button>
+              </div>
+            </div>
           </div>
-          <p class="hint center-hint gm-only">Pinte a névoa em qualquer lugar do mapa. A ficha e o painel do mestre abrem em janelas sobre a mesa.</p>
-          <p class="hint center-hint player-only">Arraste seu token e role dados — seu nick aparece em todos os dados.</p>
         </div>
 
-        <aside class="side-panel">
+        <aside id="sidePanel" class="side-panel">
+          <div class="panel-head">
+            <h2>Painel da mesa</h2>
+            <button id="btnClosePanel" class="btn small ghost" title="Fechar painel">✕</button>
+          </div>
           <div class="card glass">
-            <div class="card-head"><h2>Dados</h2><span class="muted">nick em todos os dados</span></div>
+            <div class="card-head"><h2>Dados</h2><span class="muted">nick em todos</span></div>
             <label>Rolar como (personagem)
               <select id="rollAs"></select>
             </label>
@@ -129,19 +361,19 @@
             <ul id="logList" class="log-list"></ul>
           </div>
         </aside>
+        <div id="panelScrim" class="panel-scrim" aria-hidden="true"></div>
       </div>
     </main>
   </div>
-
-  <!-- POPUP PERSONAGENS -->
+  <!-- ============ POPUP PERSONAGENS ============ -->
   <div id="charModal" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop" data-close-char="1"></div>
-    <div class="modal-card modal-xl glass" role="dialog" aria-modal="true">
+    <div class="modal-card modal-xl glass" role="dialog" aria-modal="true" aria-label="Personagens e fichas">
       <div class="modal-head">
-        <h3>Personagens & Fichas</h3>
-        <div class="row">
-          <button id="btnNewChar" class="btn small primary gm-only">+ Cadastrar personagem</button>
-          <button id="btnImportGrimoire" class="btn small gm-only">Importar grimoire</button>
+        <h3>Personagens &amp; Fichas</h3>
+        <div class="row wrap">
+          <button id="btnNewChar" class="btn small primary gm-only edit-only">+ Cadastrar personagem</button>
+          <button id="btnImportGrimoire" class="btn small gm-only edit-only">Importar grimoire</button>
           <input id="grimoireFile" type="file" accept=".json" hidden>
           <button class="btn small ghost" data-close-char="1">Fechar</button>
         </div>
@@ -159,12 +391,12 @@
                 <div class="sheet-top">
                   <div class="portrait-block">
                     <div id="charPortrait" class="portrait">Sem imagem</div>
-                    <button type="button" id="btnCharImage" class="btn small gm-only">Imagem</button>
+                    <button type="button" id="btnCharImage" class="btn small gm-only edit-only">Imagem</button>
                   </div>
                   <div class="sheet-fields">
                     <div class="grid2">
                       <label>Nome <input name="name" required></label>
-                      <label>Classe / Arquétipo <input name="clazz"></label>
+                      <label>Classe / Arquétipo <input name="clazz" placeholder="Mago, Guerreiro..."></label>
                       <label>Raça / Origem <input name="race"></label>
                       <label>Elemento <input name="element"></label>
                       <label>Nível <input name="level" type="number" min="0" value="1"></label>
@@ -173,21 +405,21 @@
                     <p class="hint">O mestre cadastra e salva. Depois, vincule o nick do jogador para ele controlar.</p>
                   </div>
                 </div>
-                <h3>Status (barras, máximos pelo mestre)</h3>
+                <h3>Status <small class="muted">máximos definidos pelo mestre</small></h3>
                 <div id="statusBars" class="status-bars"></div>
-                <h3>Atributos (base do mestre)</h3>
+                <h3>Atributos <small class="muted">somados automaticamente nas rolagens</small></h3>
                 <div id="attrGrid" class="attr-grid"></div>
                 <div class="grid2">
                   <div>
                     <div class="row between"><h3>Inventário</h3><span id="invCount" class="muted"></span></div>
-                    <label class="gm-only">Limite de itens (mestre) <input name="inventoryLimit" type="number" min="0" value="10"></label>
+                    <label class="gm-only edit-only">Limite de itens (mestre) <input name="inventoryLimit" type="number" min="0" value="10"></label>
                     <div id="inventoryList" class="inventory-list"></div>
                     <button type="button" id="btnAddItem" class="btn small">+ Item</button>
                   </div>
                   <div>
-                    <div class="row between"><h3>Poderes</h3><span class="muted">máx. 3</span></div>
-                    <label class="gm-only">Qtd. poderes (mestre)
-                      <select name="powerSlots"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option></select>
+                    <div class="row between"><h3>Poderes</h3><span id="powerMaxLabel" class="muted">máx. 3</span></div>
+                    <label class="gm-only edit-only">Qtd. poderes (mestre)
+                      <select name="powerSlots"></select>
                     </label>
                     <div id="powersList" class="powers-list"></div>
                   </div>
@@ -195,8 +427,8 @@
                 <label>Anotações <textarea name="notes" rows="3"></textarea></label>
                 <div class="sheet-actions">
                   <button type="submit" class="btn primary">Salvar personagem</button>
-                  <button type="button" id="btnCharToToken" class="btn gm-only">Criar token</button>
-                  <button type="button" id="btnDeleteChar" class="btn danger ghost gm-only">Excluir</button>
+                  <button type="button" id="btnCharToToken" class="btn gm-only edit-only">Criar token</button>
+                  <button type="button" id="btnDeleteChar" class="btn danger ghost gm-only edit-only">Excluir</button>
                 </div>
               </div>
             </form>
@@ -206,36 +438,52 @@
     </div>
   </div>
 
-  <!-- POPUP MESTRE -->
+  <!-- ============ POPUP MESTRE ============ -->
   <div id="gmModal" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop" data-close-gm="1"></div>
-    <div class="modal-card modal-xl glass" role="dialog" aria-modal="true">
+    <div class="modal-card modal-xl glass" role="dialog" aria-modal="true" aria-label="Painel do mestre">
       <div class="modal-head">
         <h3>Painel do Mestre</h3>
-        <button class="btn small ghost" data-close-gm="1">Fechar</button>
+        <div class="row wrap">
+          <span class="badge">Editor completo</span>
+          <button class="btn small ghost" data-close-gm="1">Fechar</button>
+        </div>
       </div>
       <div class="modal-body modal-scroll">
         <div class="gm-grid">
           <div class="card glass-soft">
-            <div class="card-head"><h3>Mapa</h3></div>
+            <div class="card-head"><h3>Mapas &amp; ambientes</h3><span class="muted">troque quando quiser</span></div>
             <div class="stack">
-              <button id="btnMapUpload" class="btn">Enviar imagem do mapa</button>
-              <button id="btnMapClear" class="btn ghost">Remover mapa</button>
-              <label>Colunas <input id="gridCols" type="number" min="5" max="60" value="24"></label>
-              <label>Linhas <input id="gridRows" type="number" min="5" max="60" value="16"></label>
-              <button id="btnApplyGrid" class="btn small">Aplicar grid</button>
+              <div class="row wrap">
+                <input id="mapNameInput" type="text" maxlength="32" placeholder="Nome do novo ambiente">
+                <button id="btnNewMap" class="btn primary">+ Novo mapa</button>
+              </div>
+              <ul id="mapList" class="map-list"></ul>
+              <div class="grid2">
+                <label>Colunas <input id="gridCols" type="number" min="5" max="80" value="24"></label>
+                <label>Linhas <input id="gridRows" type="number" min="5" max="80" value="16"></label>
+              </div>
+              <button id="btnApplyGrid" class="btn small">Aplicar grade ao ambiente ativo</button>
+              <div class="row wrap">
+                <button id="btnMapUpload" class="btn">Trocar imagem</button>
+                <button id="btnMapClear" class="btn ghost">Remover imagem</button>
+              </div>
+              <p class="hint">O ambiente ativo aparece na barra superior para troca rápida durante a sessão.</p>
             </div>
           </div>
+
           <div class="card glass-soft">
             <div class="card-head"><h3>Névoa de guerra</h3></div>
             <div class="stack">
-              <p class="hint">Pintura livre: ative “Pintar névoa livre” na barra da mesa e desenhe onde quiser.</p>
+              <p class="hint">Pintura livre: ative “Névoa” na barra da mesa e desenhe onde quiser. O pincel funciona em qualquer ponto do mapa.</p>
               <button id="btnFogCover" class="btn">Cobrir tudo</button>
               <button id="btnFogReveal" class="btn">Revelar tudo</button>
+              <p class="hint">Cada mapa guarda a própria névoa.</p>
             </div>
           </div>
+
           <div class="card glass-soft">
-            <div class="card-head"><h3>Tokens & Criaturas</h3></div>
+            <div class="card-head"><h3>Tokens &amp; criaturas</h3></div>
             <div class="stack">
               <div class="row wrap">
                 <button id="btnAddEnemy" class="btn">+ Inimigo</button>
@@ -243,12 +491,14 @@
                 <button id="btnAddPlayers" class="btn">Tokens dos jogadores</button>
               </div>
               <ul id="tokenList" class="token-admin-list"></ul>
+              <p class="hint">Os tokens pertencem ao ambiente ativo.</p>
             </div>
           </div>
+
           <div class="card glass-soft">
-            <div class="card-head"><h3>Vínculos & Biblioteca</h3></div>
+            <div class="card-head"><h3>Vínculos &amp; biblioteca</h3></div>
             <ul id="linkList" class="token-admin-list"></ul>
-            <h4 style="margin-top:10px">Biblioteca (Grimoire)</h4>
+            <h4 style="margin-top:12px">Biblioteca (Grimoire)</h4>
             <ul id="libraryList" class="token-admin-list"></ul>
           </div>
         </div>
@@ -256,10 +506,10 @@
     </div>
   </div>
 
-  <!-- MODAL TOKEN -->
+  <!-- ============ MODAL TOKEN ============ -->
   <div id="modal" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop" data-close="1"></div>
-    <div class="modal-card glass" role="dialog" aria-modal="true">
+    <div class="modal-card glass" role="dialog" aria-modal="true" aria-label="Editar token">
       <div class="modal-head">
         <h3 id="modalTitle">Editar token</h3>
         <button class="btn small ghost" data-close="1">Fechar</button>
@@ -268,6 +518,18 @@
     </div>
   </div>
 
+  <!-- ============ FALHA CRÍTICA ============ -->
+  <div id="fumbleOverlay" class="fumble-overlay hidden" aria-live="assertive" aria-hidden="true">
+    <div class="fumble-vignette" aria-hidden="true"></div>
+    <div class="fumble-content">
+      <div class="fumble-kicker">1 natural · o destino cobra seu preço</div>
+      <div class="fumble-title">FALHA<br>CRÍTICA</div>
+      <div class="fumble-rule"></div>
+      <div class="fumble-name" id="fumbleName">Personagem</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <input id="imagePicker" type="file" accept="image/*" hidden>
 </body>
 </html>
