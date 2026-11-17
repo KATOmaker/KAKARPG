@@ -17,18 +17,15 @@
     <div class="lobby-card glass">
       <div class="brand-mark">✦</div>
       <h1>Ascensão das Bruxas</h1>
-      <p class="subtitle">Mesa virtual — mestre cadastra, jogadores controlam. Mapa, fichas, dados, iniciativa e névoa.</p>
-
+      <p class="subtitle">Mesa virtual — mestre cadastra e vincula personagens, jogadores controlam e rolam dados.</p>
       <div class="field">
-        <label for="playerName">Seu nome de jogador</label>
+        <label for="playerName">Seu nick (aparece nos dados)</label>
         <input id="playerName" type="text" autocomplete="name" placeholder="Ex.: Kayky, Miriam">
-        <small>O mestre conecta personagens a este nome para você controlar.</small>
       </div>
       <div class="field">
         <label for="roomCode">Código da sala</label>
         <input id="roomCode" type="text" maxlength="10" autocapitalize="characters" placeholder="Ex.: BRUXA">
       </div>
-
       <div class="actions stack">
         <button id="btnHost" class="btn primary">Entrar como Mestre</button>
         <button id="btnJoin" class="btn">Entrar como Jogador</button>
@@ -48,114 +45,116 @@
         </div>
       </div>
       <div class="topbar-right">
+        <button id="btnOpenChars" class="btn small">Personagens</button>
+        <button id="btnOpenGm" class="btn small gm-only">Painel do Mestre</button>
         <span id="connBadge" class="badge">offline</span>
         <button id="btnLeave" class="btn small ghost">Sair</button>
       </div>
     </header>
 
-    <nav class="tabs glass-soft" role="tablist">
-      <button class="tab active" data-view="view-table" role="tab">Mesa</button>
-      <button class="tab" data-view="view-characters" role="tab">Personagens</button>
-      <button class="tab gm-only" data-view="view-gm" role="tab">Mestre</button>
-    </nav>
-
-    <main class="main">
-      <section id="view-table" class="view active" role="tabpanel">
-        <div class="layout-table">
-          <div class="board-panel">
-            <div class="board-toolbar glass-soft">
-              <div class="toolbar-group">
-                <button id="btnFit" class="btn small">Ajustar</button>
-                <label class="toggle"><input type="checkbox" id="toggleGrid" checked> Grade</label>
-              </div>
-              <div class="toolbar-group gm-only">
-                <label class="toggle"><input type="checkbox" id="fogPaint"> Pintar névoa</label>
-                <select id="fogMode" class="select small">
-                  <option value="hide">Esconder</option>
-                  <option value="reveal">Revelar</option>
-                </select>
-              </div>
+    <main class="main main-table">
+      <div class="layout-table">
+        <div class="board-panel">
+          <div class="board-toolbar glass-soft">
+            <div class="toolbar-group">
+              <button id="btnFit" class="btn small">Centralizar</button>
+              <label class="toggle"><input type="checkbox" id="toggleGrid" checked> Grade</label>
             </div>
+            <div class="toolbar-group gm-only">
+              <label class="toggle"><input type="checkbox" id="fogPaint"> Pintar névoa livre</label>
+              <select id="fogMode" class="select small">
+                <option value="hide">Esconder</option>
+                <option value="reveal">Revelar</option>
+              </select>
+              <label class="toggle">Pincel <input id="fogSize" type="range" min="10" max="120" value="40"></label>
+            </div>
+          </div>
+          <div class="board-center">
             <div id="boardWrap" class="board-wrap glass">
               <div id="board" class="board">
                 <div id="mapLayer" class="layer map-layer"></div>
                 <canvas id="gridCanvas" class="layer grid-layer"></canvas>
-                <div id="tokenLayer" class="layer token-layer"></div>
                 <canvas id="fogCanvas" class="layer fog-layer"></canvas>
+                <div id="tokenLayer" class="layer token-layer"></div>
                 <div id="diceStage" class="dice-stage" aria-live="polite"></div>
               </div>
             </div>
-            <p class="hint gm-only">Mestre: arraste tokens, pinte a névoa, clique no token para editar. Dados mostram o nome do personagem.</p>
-            <p class="hint player-only">Arraste seu personagem no mapa e ajuste seus status pelas barras na ficha quando permitido.</p>
           </div>
-
-          <aside class="side-panel">
-            <div class="card glass">
-              <div class="card-head"><h2>Dados</h2><span class="muted">resultado na mesa</span></div>
-              <label>Rolar como (personagem)
-                <select id="rollAs"></select>
-              </label>
-              <label>Atributo somado ao d20
-                <select id="rollAttr">
-                  <option value="">Nenhum (só modificador)</option>
-                  <option value="for">Força</option><option value="des">Destreza</option><option value="con">Constituição</option>
-                  <option value="int">Inteligência</option><option value="sab">Sabedoria</option><option value="car">Carisma</option>
-                </select>
-              </label>
-              <div class="dice-bar">
-                <button class="die-btn" data-die="2">d2</button>
-                <button class="die-btn" data-die="4">d4</button>
-                <button class="die-btn" data-die="6">d6</button>
-                <button class="die-btn" data-die="8">d8</button>
-                <button class="die-btn" data-die="10">d10</button>
-                <button class="die-btn" data-die="12">d12</button>
-                <button class="die-btn" data-die="20">d20</button>
-                <button class="die-btn" data-die="100">d100</button>
-              </div>
-              <div class="dice-mod">
-                <label>Mod. extra <input id="diceMod" type="number" value="0"></label>
-                <label>Qtd <input id="diceQty" type="number" value="1" min="1" max="10"></label>
-              </div>
-            </div>
-
-            <div class="card glass">
-              <div class="card-head">
-                <h2>Iniciativa</h2>
-                <div class="row gm-only">
-                  <button id="btnRollInit" class="btn small primary">Rolar auto</button>
-                  <button id="btnNextTurn" class="btn small">Próximo</button>
-                  <button id="btnClearInit" class="btn small ghost">Limpar</button>
-                </div>
-              </div>
-              <ol id="initList" class="init-list"></ol>
-              <p id="initEmpty" class="hint">Sem iniciativa ativa.</p>
-            </div>
-
-            <div class="card glass">
-              <div class="card-head"><h2>Registro</h2><button id="btnClearLog" class="btn small ghost">Limpar</button></div>
-              <ul id="logList" class="log-list"></ul>
-            </div>
-          </aside>
+          <p class="hint center-hint gm-only">Pinte a névoa em qualquer lugar do mapa. A ficha e o painel do mestre abrem em janelas sobre a mesa.</p>
+          <p class="hint center-hint player-only">Arraste seu token e role dados — seu nick aparece em todos os dados.</p>
         </div>
-      </section>
 
-      <section id="view-characters" class="view" role="tabpanel" hidden>
-        <div class="view-header">
-          <h2>Personagens & Fichas</h2>
-          <div class="row gm-only">
-            <button id="btnNewChar" class="btn primary">+ Cadastrar personagem</button>
-            <button id="btnImportGrimoire" class="btn">Importar grimoire</button>
-            <input id="grimoireFile" type="file" accept=".json" hidden>
+        <aside class="side-panel">
+          <div class="card glass">
+            <div class="card-head"><h2>Dados</h2><span class="muted">nick em todos os dados</span></div>
+            <label>Rolar como (personagem)
+              <select id="rollAs"></select>
+            </label>
+            <label>Atributo somado ao d20
+              <select id="rollAttr">
+                <option value="">Nenhum</option>
+                <option value="for">Força</option><option value="des">Destreza</option><option value="con">Constituição</option>
+                <option value="int">Inteligência</option><option value="sab">Sabedoria</option><option value="car">Carisma</option>
+              </select>
+            </label>
+            <div class="dice-bar">
+              <button class="die-btn" data-die="2">d2</button>
+              <button class="die-btn" data-die="4">d4</button>
+              <button class="die-btn" data-die="6">d6</button>
+              <button class="die-btn" data-die="8">d8</button>
+              <button class="die-btn" data-die="10">d10</button>
+              <button class="die-btn" data-die="12">d12</button>
+              <button class="die-btn" data-die="20">d20</button>
+              <button class="die-btn" data-die="100">d100</button>
+            </div>
+            <div class="dice-mod">
+              <label>Mod. extra <input id="diceMod" type="number" value="0"></label>
+              <label>Qtd <input id="diceQty" type="number" value="1" min="1" max="10"></label>
+            </div>
           </div>
+          <div class="card glass">
+            <div class="card-head">
+              <h2>Iniciativa</h2>
+              <div class="row gm-only">
+                <button id="btnRollInit" class="btn small primary">Rolar</button>
+                <button id="btnNextTurn" class="btn small">Próx.</button>
+                <button id="btnClearInit" class="btn small ghost">Limpar</button>
+              </div>
+            </div>
+            <ol id="initList" class="init-list"></ol>
+            <p id="initEmpty" class="hint">Sem iniciativa ativa.</p>
+          </div>
+          <div class="card glass">
+            <div class="card-head"><h2>Registro</h2><button id="btnClearLog" class="btn small ghost">Limpar</button></div>
+            <ul id="logList" class="log-list"></ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- POPUP PERSONAGENS -->
+  <div id="charModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-char="1"></div>
+    <div class="modal-card modal-xl glass" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3>Personagens & Fichas</h3>
+        <div class="row">
+          <button id="btnNewChar" class="btn small primary gm-only">+ Cadastrar personagem</button>
+          <button id="btnImportGrimoire" class="btn small gm-only">Importar grimoire</button>
+          <input id="grimoireFile" type="file" accept=".json" hidden>
+          <button class="btn small ghost" data-close-char="1">Fechar</button>
         </div>
+      </div>
+      <div class="modal-body modal-scroll">
         <div class="char-layout">
-          <aside class="card glass char-list-card">
+          <aside class="card glass-soft char-list-card">
             <div class="card-head"><h3>Lista</h3></div>
             <ul id="charList" class="char-list"></ul>
           </aside>
-          <div class="card glass char-sheet-card">
+          <div class="card glass-soft char-sheet-card">
             <form id="charForm" class="char-form" autocomplete="off">
-              <div class="sheet-empty" id="sheetEmpty">Selecione um personagem. Apenas o mestre cadastra novos personagens.</div>
+              <div class="sheet-empty" id="sheetEmpty">Nenhum personagem selecionado. O mestre cadastra e salva personagens aqui; depois conecta ao jogador.</div>
               <div id="sheetBody" class="sheet-body hidden">
                 <div class="sheet-top">
                   <div class="portrait-block">
@@ -169,19 +168,15 @@
                       <label>Raça / Origem <input name="race"></label>
                       <label>Elemento <input name="element"></label>
                       <label>Nível <input name="level" type="number" min="0" value="1"></label>
-                      <label>Conectar ao jogador <input name="owner" placeholder="nome exato do jogador"></label>
+                      <label>Conectar ao jogador (nick) <input name="owner" placeholder="nick exato do jogador"></label>
                     </div>
-                    <p class="hint gm-only">Defina o nome do jogador em “Conectar ao jogador” para ele controlar este personagem.</p>
+                    <p class="hint">O mestre cadastra e salva. Depois, vincule o nick do jogador para ele controlar.</p>
                   </div>
                 </div>
-
-                <h3>Status (barras definidas pelo mestre)</h3>
+                <h3>Status (barras, máximos pelo mestre)</h3>
                 <div id="statusBars" class="status-bars"></div>
-
-                <h3>Atributos (base definida pelo mestre)</h3>
+                <h3>Atributos (base do mestre)</h3>
                 <div id="attrGrid" class="attr-grid"></div>
-                <p class="hint">Rolagens de d20 somam o atributo do personagem selecionado e aparecem na mesa com o nome.</p>
-
                 <div class="grid2">
                   <div>
                     <div class="row between"><h3>Inventário</h3><span id="invCount" class="muted"></span></div>
@@ -191,33 +186,37 @@
                   </div>
                   <div>
                     <div class="row between"><h3>Poderes</h3><span class="muted">máx. 3</span></div>
-                    <label class="gm-only">Quantidade de poderes (mestre)
+                    <label class="gm-only">Qtd. poderes (mestre)
                       <select name="powerSlots"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option></select>
                     </label>
                     <div id="powersList" class="powers-list"></div>
                   </div>
                 </div>
-
-                <label>Anotações <textarea name="notes" rows="4"></textarea></label>
-
+                <label>Anotações <textarea name="notes" rows="3"></textarea></label>
                 <div class="sheet-actions">
-                  <button type="submit" class="btn primary">Salvar ficha</button>
-                  <button type="button" id="btnCharToToken" class="btn gm-only">Criar token no mapa</button>
+                  <button type="submit" class="btn primary">Salvar personagem</button>
+                  <button type="button" id="btnCharToToken" class="btn gm-only">Criar token</button>
                   <button type="button" id="btnDeleteChar" class="btn danger ghost gm-only">Excluir</button>
                 </div>
               </div>
             </form>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
 
-      <section id="view-gm" class="view" role="tabpanel" hidden>
-        <div class="view-header">
-          <h2>Painel do Mestre</h2>
-          <p class="hint">Cadastro, vínculo jogador-personagem, mapa, névoa e criaturas.</p>
-        </div>
+  <!-- POPUP MESTRE -->
+  <div id="gmModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-gm="1"></div>
+    <div class="modal-card modal-xl glass" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3>Painel do Mestre</h3>
+        <button class="btn small ghost" data-close-gm="1">Fechar</button>
+      </div>
+      <div class="modal-body modal-scroll">
         <div class="gm-grid">
-          <div class="card glass">
+          <div class="card glass-soft">
             <div class="card-head"><h3>Mapa</h3></div>
             <div class="stack">
               <button id="btnMapUpload" class="btn">Enviar imagem do mapa</button>
@@ -227,15 +226,15 @@
               <button id="btnApplyGrid" class="btn small">Aplicar grid</button>
             </div>
           </div>
-          <div class="card glass">
+          <div class="card glass-soft">
             <div class="card-head"><h3>Névoa de guerra</h3></div>
             <div class="stack">
-              <p class="hint">Ative “Pintar névoa” na mesa e arraste. Escolha esconder ou revelar.</p>
+              <p class="hint">Pintura livre: ative “Pintar névoa livre” na barra da mesa e desenhe onde quiser.</p>
               <button id="btnFogCover" class="btn">Cobrir tudo</button>
               <button id="btnFogReveal" class="btn">Revelar tudo</button>
             </div>
           </div>
-          <div class="card glass">
+          <div class="card glass-soft">
             <div class="card-head"><h3>Tokens & Criaturas</h3></div>
             <div class="stack">
               <div class="row wrap">
@@ -246,18 +245,18 @@
               <ul id="tokenList" class="token-admin-list"></ul>
             </div>
           </div>
-          <div class="card glass">
+          <div class="card glass-soft">
             <div class="card-head"><h3>Vínculos & Biblioteca</h3></div>
-            <p class="hint">Personagens conectados: cada jogador controla os que têm o nome dele em “Conectar ao jogador”.</p>
             <ul id="linkList" class="token-admin-list"></ul>
             <h4 style="margin-top:10px">Biblioteca (Grimoire)</h4>
             <ul id="libraryList" class="token-admin-list"></ul>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   </div>
 
+  <!-- MODAL TOKEN -->
   <div id="modal" class="modal hidden" aria-hidden="true">
     <div class="modal-backdrop" data-close="1"></div>
     <div class="modal-card glass" role="dialog" aria-modal="true">
